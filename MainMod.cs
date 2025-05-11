@@ -44,10 +44,10 @@ public class MyMod : MelonMod
         if (sceneName == "Main")
         {
             Logger.Debug("Main scene loaded, waiting for player");
-            MelonCoroutines.Start(WaitForPlayer(DoStuff()));
+            MelonCoroutines.Start(Utils.WaitForPlayer(DoStuff()));
             
             Logger.Debug("Main scene loaded, waiting for network");
-            MelonCoroutines.Start(WaitForNetwork(DoNetworkStuff()));
+            MelonCoroutines.Start(Utils.WaitForNetwork(DoNetworkStuff()));
         }
     }
 

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>k073l.S1MelonMod</id>
+        <version>1.0.0</version>
+        <description>Schedule I MelonLoader Mod Template</description>
+        <authors>k073l</authors>
+        <readme>README.md</readme>
+        <projectUrl>https://github.com/k073l/S1MelonModTemplate</projectUrl>
+        <packageTypes>
+            <packageType name="Template" />
+        </packageTypes>
+        <license type="expression">MIT</license>
+    </metadata>
+    <files>
+        <file src="**" exclude="**/bin/**;**/obj/**;**/.vs/**;**/.git/**;*.nupkg;**/.idea/**;**/assets/**" target="content/" />
+        <file src="README.md" target="README.md" />
+    </files>
+</package>

@@ -5,11 +5,13 @@ using System.Collections;
 #if MONO
 using ScheduleOne;
 using ScheduleOne.ItemFramework;
+using ScheduleOne.PlayerScripts;
 using FishNet;
 #else
 using Il2CppInterop.Runtime;
 using Il2CppScheduleOne;
 using Il2CppScheduleOne.ItemFramework;
+using Il2CppScheduleOne.PlayerScripts;
 using Il2CppFishNet;
 using Object = Il2CppSystem.Object;
 #endif
