@@ -3,6 +3,7 @@ using MelonLoader;
 
 namespace MyMod.Helpers;
 
+//-:cnd:noEmit
 public static class MelonLoggerExtensions
 {
     public static void Debug(this MelonLogger.Instance logger, string message, bool stacktrace = true)
@@ -26,7 +27,7 @@ public static class MelonLoggerExtensions
         for (int i = 2; i < stackTrace.FrameCount; i++)
         {
             var frame = stackTrace.GetFrame(i);
-            var method = frame.GetMethod();
+            var method = frame?.GetMethod();
             if (method?.DeclaringType == null)
                 continue;
 

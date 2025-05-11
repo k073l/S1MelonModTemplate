@@ -1,31 +1,41 @@
 ﻿{
   "$schema": "https://json.schemastore.org/template",
   "author": "k073l",
-  "classifications": ["Schedule I", "MelonLoader", "Mono", "IL2CPP"],
+  "classifications": [
+    "Schedule I",
+    "MelonLoader",
+    "Mono",
+    "IL2CPP"
+  ],
   "identity": "k073l.S1MelonMod",
   "name": "Schedule I MelonLoader Mod Template",
   "shortName": "S1MelonMod",
-  "sourceName": "S1MelonMod",
+  "sourceName": "MyMod",
   "preferNameDirectory": true,
   "tags": {
     "language": "C#",
     "type": "project"
   },
+  "guids": [
+    "FAE04EC0-301F-11D3-BF4B-00C04F79EFBC",
+    "8352B867-0BEC-4D6C-B93C-EFA516BEE616",
+    "53F2A6F9-8C8F-4C2E-9388-AABC4B5D6F7E"
+  ],
   "sources": [
     {
       "modifiers": [
         {
-          "exclude": ["**/bin/**", "**/obj/**", "**/.vs/**"]
-        },
-        {
-          "copyOnly": ["**/*.cs", "post-process.ps1"]
+          "exclude": [
+            "**/bin/**",
+            "**/obj/**",
+            "**/.vs/**",
+            "**/.git/**",
+            "*.nupkg",
+            "**/.idea/**",
+            "**/assets/**",
+          ]
         }
       ]
-    }
-  ],
-  "primaryOutputs": [
-    {
-      "path": "MyMod.csproj"
     }
   ],
   "symbols": {
@@ -74,6 +84,7 @@
       "type": "parameter",
       "dataType": "string",
       "isRequired": false,
+      "defaultValue": "$(CommonDir)\\LocalMultiplayer\\LocalMultiplayer.dll",
       "description": "Path to Multiplayer Mod Location. This mod allows you to test your mods in local multiplayer.",
       "replaces": "MULTIPLAYERMOD"
     },
@@ -82,6 +93,7 @@
       "type": "parameter",
       "dataType": "string",
       "isRequired": false,
+      "defaultValue": "$(CommonDir)\\LocalMultiplayer\\LocalMultiplayer.bat",
       "description": "Path to Multiplayer Mod Starter Location. This is a batch file that starts the game in two windows - server and client.",
       "replaces": "MULTIPLAYERMODSTARTER"
     }

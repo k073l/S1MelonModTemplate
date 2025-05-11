@@ -1,19 +1,23 @@
 ﻿using MelonLoader;
 using UnityEngine;
+using System.Collections;
 
 #if MONO
 using ScheduleOne;
 using ScheduleOne.ItemFramework;
+using FishNet;
 #else
 using Il2CppInterop.Runtime;
 using Il2CppScheduleOne;
 using Il2CppScheduleOne.ItemFramework;
+using Il2CppFishNet;
 using Object = Il2CppSystem.Object;
 #endif
 
 
 namespace MyMod.Helpers;
 
+//-:cnd:noEmit
 #if !MONO
 /// <summary>
 /// Provides extension methods for converting between C# and Il2Cpp lists.
@@ -55,7 +59,7 @@ public static class Il2CppListExtensions
 /// </summary>
 public static class Utils
 {
-    private static MelonLogger.Instance _logger = new MelonLogger.Instance($"{BuildInfo.Name}-Utils");
+    private static readonly MelonLogger.Instance Logger = new MelonLogger.Instance($"{BuildInfo.Name}-Utils");
 
     /// <summary>
     /// Searches all loaded objects of type <typeparamref name="T"/> and returns the first one matching the given name.
@@ -76,7 +80,7 @@ public static class Utils
             foreach (var obj in Resources.FindObjectsOfTypeAll<T>())
             {
                 if (obj.name != objectName) continue;
-                _logger.Debug($"Found {typeof(T).Name} '{objectName}' directly in loaded objects");
+                Logger.Debug($"Found {typeof(T).Name} '{objectName}' directly in loaded objects");
                 return obj;
             }
 
@@ -84,7 +88,7 @@ public static class Utils
         }
         catch (Exception ex)
         {
-            _logger.Error($"Error finding {typeof(T).Name} '{objectName}': {ex.Message}");
+            Logger.Error($"Error finding {typeof(T).Name} '{objectName}': {ex.Message}");
             return null;
         }
     }
@@ -125,7 +129,7 @@ public static class Utils
     /// Checks if the given object is of type <typeparamref name="T"/> and casts it to that type.
     /// </summary>
     /// <param name="obj">The object to check.</param>
-    /// <param name="result">The casted object if the check is successful; otherwise, null.</param>
+    /// <param name="result">The cast object if the check is successful; otherwise, null.</param>
     /// <typeparam name="T">The type to check against.</typeparam>
     /// <returns>True if the object is of type <typeparamref name="T"/>; otherwise, false.</returns>
     /// <remarks>
@@ -192,12 +196,39 @@ public static class Utils
             }
             else
             {
-                _logger.Warning(
+                Logger.Warning(
                     $"Definition {item.Definition?.GetType().FullName} is not a StorableItemDefinition");
             }
         }
 
         return itemDefinitions
             .ToList();
+    }
+    
+    /// <summary>
+    /// Waits for the player to be ready before starting the given coroutine.
+    /// </summary>
+    /// <param name="routine">Coroutine to start when player is ready</param>
+    /// <returns>An enumerator that waits for the player to be ready.</returns>
+    public static IEnumerator WaitForPlayer(IEnumerator routine)
+    {
+        while (Player.Local == null || Player.Local.gameObject == null)
+            yield return null;
+
+        // player is ready, start the coroutine
+        MelonCoroutines.Start(routine);
+    }
+    
+    /// <summary>
+    /// Waits for the network to be ready before starting the given coroutine.
+    /// </summary>
+    /// <param name="routine">Coroutine to start when network is ready</param>
+    /// <returns>An enumerator that waits for the network to be ready.</returns>
+    public static IEnumerator WaitForNetwork(IEnumerator routine)
+    {
+        while (InstanceFinder.IsServer == false && InstanceFinder.IsClient == false)
+            yield return null;
+        // network is ready, start the coroutine
+        MelonCoroutines.Start(routine);
     }
 }
