@@ -79,14 +79,23 @@
       "description": "Path to UnityExplorer Mod Location for IL2CPP. UnityExplorer is a mod that helps you debug GameObjects and their components.",
       "replaces": "UEIL2CPP"
     },
-    "MultiplayerMod": {
+    "MultiplayerModMono": {
       "displayName": "Multiplayer Mod Location",
       "type": "parameter",
       "dataType": "string",
       "isRequired": false,
-      "defaultValue": "$(CommonDir)\\LocalMultiplayer\\LocalMultiplayer.dll",
+      "defaultValue": "$(CommonDir)\\LocalMultiplayer\\LocalMultiplayer-Mono.dll",
       "description": "Path to Multiplayer Mod Location. This mod allows you to test your mods in local multiplayer.",
       "replaces": "MULTIPLAYERMOD"
+    },
+    "MultiplayerModIL2CPP": {
+      "displayName": "Multiplayer Mod Location (IL2CPP)",
+      "type": "parameter",
+      "dataType": "string",
+      "isRequired": false,
+      "defaultValue": "$(CommonDir)\\LocalMultiplayer\\LocalMultiplayer-IL2CPP.dll",
+      "description": "Path to Multiplayer Mod Location. This mod allows you to test your mods in local multiplayer.",
+      "replaces": "MULTIPLAYERMODIL2CPP"
     },
     "MultiplayerModStarter": {
       "displayName": "Multiplayer Mod Starter Location",

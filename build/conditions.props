@@ -8,7 +8,8 @@
     <PropertyGroup>
         <UnityExplorer Condition="'$(IsMono)' == 'true'">UEMONO</UnityExplorer>
         <UnityExplorer Condition="'$(IsMono)' != 'true'">UEIL2CPP</UnityExplorer>
-        <MultiplayerMod>MULTIPLAYERMOD</MultiplayerMod>
+        <MultiplayerMod Condition="'$(IsMono)' == 'true'">MULTIPLAYERMOD</MultiplayerMod>
+        <MultiplayerMod Condition="'$(IsMono)' != 'true'">MULTIPLAYERMODIL2CPP</MultiplayerMod>
         <MultiplayerModStarter>MULTIPLAYERMODSTARTER</MultiplayerModStarter>
 
         <!-- Set framework and assembly name based on Mono or IL2CPP -->
