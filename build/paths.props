@@ -1,0 +1,9 @@
+﻿<Project>
+    <PropertyGroup>
+        <!-- Paths and conditions -->
+        <S1MonoDir>S1MONODIR</S1MonoDir>
+        <S1CPPDir>S1IL2CPPDIR</S1CPPDir>
+        <CommonDir>COMMONDIR</CommonDir>
+        <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    </PropertyGroup>
+</Project>

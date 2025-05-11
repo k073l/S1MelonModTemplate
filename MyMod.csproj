@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="build/paths.props"/>
+
+    <PropertyGroup>
+        <!-- Testing props -->
+        <!--<DefineConstants>$(DefineConstants);TestMultiplayer</DefineConstants>-->
+        <!--<DefineConstants>$(DefineConstants);UnityExplorer</DefineConstants>-->
+
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+
+        <RootNamespace>MyMod</RootNamespace>
+
+        <Configurations>Debug Mono;Release Mono;Debug IL2CPP;Release IL2CPP</Configurations>
+    </PropertyGroup>
+
+    <!-- Paths to other mods that script should add (no guard for mono/il2cpp incompat) -->
+    <ItemGroup>
+        <!--<ModList Include="$(CommonDir)\Mods\DisclaimerSkipMono.dll" />-->
+    </ItemGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug Mono'">
+        <DefineConstants>$(DefineConstants);MONO</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Release Mono'">
+        <DefineConstants>$(DefineConstants);MONO;RELEASE</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug IL2CPP'">
+        <DefineConstants>$(DefineConstants)</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Release IL2CPP'">
+        <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+    </PropertyGroup>
+    
+
+    <Import Project="build/conditions.props"/>
+
+    <ItemGroup Label="Publicizer" Condition="'$(IsMono)' == 'true'">
+        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.5.0-beta.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <!-- MelonLoader References -->
+    <Import Project="build\references\MelonMono.targets"/>
+    <Import Project="build\references\MelonIL2CPP.targets"/>
+
+    <!-- Events -->
+    <Import Project="build\events\preBuild.targets"/>
+    <Import Project="build\events\postBuild.targets"/>
+
+</Project>

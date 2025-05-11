@@ -1,0 +1,89 @@
+﻿{
+  "$schema": "https://json.schemastore.org/template",
+  "author": "k073l",
+  "classifications": ["Schedule I", "MelonLoader", "Mono", "IL2CPP"],
+  "identity": "k073l.S1MelonMod",
+  "name": "Schedule I MelonLoader Mod Template",
+  "shortName": "S1MelonMod",
+  "sourceName": "S1MelonMod",
+  "preferNameDirectory": true,
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "exclude": ["**/bin/**", "**/obj/**", "**/.vs/**"]
+        },
+        {
+          "copyOnly": ["**/*.cs", "post-process.ps1"]
+        }
+      ]
+    }
+  ],
+  "primaryOutputs": [
+    {
+      "path": "MyMod.csproj"
+    }
+  ],
+  "symbols": {
+    "S1MonoDir": {
+      "displayName": "Schedule I Mono Location",
+      "type": "parameter",
+      "dataType": "string",
+      "isRequired": true,
+      "description": "The path to the Schedule I Mono location. This is used to set up the project references.",
+      "replaces": "S1MONODIR"
+    },
+    "S1IL2CPPDir": {
+      "displayName": "Schedule I IL2CPP Location",
+      "type": "parameter",
+      "dataType": "string",
+      "isRequired": true,
+      "description": "The path to the Schedule I IL2CPP location. This is used to set up the project references.",
+      "replaces": "S1IL2CPPDIR"
+    },
+    "CommonDir": {
+      "displayName": "Common Location",
+      "type": "parameter",
+      "dataType": "string",
+      "isRequired": false,
+      "description": "Path to Common location. This could be used to store commonly used mods in one place.",
+      "replaces": "COMMONDIR"
+    },
+    "UnityExplorerMono": {
+      "displayName": "UnityExplorer Mod Location (Mono)",
+      "type": "parameter",
+      "dataType": "string",
+      "isRequired": false,
+      "description": "Path to UnityExplorer Mod Location for Mono. UnityExplorer is a mod that helps you debug GameObjects and their components.",
+      "replaces": "UEMONO"
+    },
+    "UnityExplorerIL2CPP": {
+      "displayName": "UnityExplorer Mod Location (IL2CPP)",
+      "type": "parameter",
+      "dataType": "string",
+      "isRequired": false,
+      "description": "Path to UnityExplorer Mod Location for IL2CPP. UnityExplorer is a mod that helps you debug GameObjects and their components.",
+      "replaces": "UEIL2CPP"
+    },
+    "MultiplayerMod": {
+      "displayName": "Multiplayer Mod Location",
+      "type": "parameter",
+      "dataType": "string",
+      "isRequired": false,
+      "description": "Path to Multiplayer Mod Location. This mod allows you to test your mods in local multiplayer.",
+      "replaces": "MULTIPLAYERMOD"
+    },
+    "MultiplayerModStarter": {
+      "displayName": "Multiplayer Mod Starter Location",
+      "type": "parameter",
+      "dataType": "string",
+      "isRequired": false,
+      "description": "Path to Multiplayer Mod Starter Location. This is a batch file that starts the game in two windows - server and client.",
+      "replaces": "MULTIPLAYERMODSTARTER"
+    }
+  }
+}
