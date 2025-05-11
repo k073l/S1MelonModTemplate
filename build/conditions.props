@@ -4,15 +4,8 @@
         <IsMultiplayerTest Condition="'$(DefineConstants)' != '' and $(DefineConstants.Contains('TestMultiplayer'))">true</IsMultiplayerTest>
         <IsUnityExplorer Condition="'$(DefineConstants)' != '' and $(DefineConstants.Contains('UnityExplorer'))">true</IsUnityExplorer>
     </PropertyGroup>
-    
-    <PropertyGroup Condition="'$(IsMultiplayerTest)' == 'true'">
-        <DefineConstants>$(DefineConstants);MONO</DefineConstants>
-    </PropertyGroup>
 
     <PropertyGroup>
-        <!-- Re-check IsMono-->
-        <IsMono Condition="'$(DefineConstants)' != '' and $(DefineConstants.Contains('MONO'))">true</IsMono>
-
         <UnityExplorer Condition="'$(IsMono)' == 'true'">UEMONO</UnityExplorer>
         <UnityExplorer Condition="'$(IsMono)' != 'true'">UEIL2CPP</UnityExplorer>
         <MultiplayerMod>MULTIPLAYERMOD</MultiplayerMod>
