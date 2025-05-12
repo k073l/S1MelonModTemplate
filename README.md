@@ -57,16 +57,17 @@ dotnet new S1MelonMod -n MyNewMod \
   --S1IL2CPPDir ""
 ```
 #### Parameters
-| Name                  | Required | Description                                                              |
-|-----------------------|----------|--------------------------------------------------------------------------|
-| S1MonoDir             | Yes      | Path to the Mono version of the game.                                    |
-| S1IL2CPPDir           | Yes      | Path to the IL2CPP version of the game.                                  |
-| CommonDir             | No       | Path to the common directory. (helper path, mostly useful as a variable) |
-| UnityExplorerMono     | No       | Path to the Mono version of the UnityExplorer mod.                       |
-| UnityExplorerIL2CPP   | No       | Path to the IL2CPP version of the UnityExplorer mod.                     |
-| MultiplayerModMono    | No       | Path to the Mono version of the LocalMultiplayer mod.                    |
-| MultiplayerModIL2CPP  | No       | Path to the IL2CPP version of the LocalMultiplayer mod.                  |
-| MultiplayerModStarter | No       | Path to the LocalMultiplayer mod starter bat file.                       |
+| Name                  | Required | Description                                                                                          |
+| --------------------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| S1MonoDir             | Yes      | Path to the Mono version of the game.                                                                |
+| S1IL2CPPDir           | Yes      | Path to the IL2CPP version of the game.                                                              |
+| CommonDir             | No       | Path to the common directory. (helper path, mostly useful as a variable)                             |
+| UnityExplorerMono     | No       | Path to the Mono version of the [UnityExplorer](https://github.com/yukieiji/UnityExplorer) mod.      |
+| UnityExplorerIL2CPP   | No       | Path to the IL2CPP version of the [UnityExplorer](https://github.com/yukieiji/UnityExplorer) mod.    |
+| MultiplayerModMono    | No       | Path to the Mono version of the [LocalMultiplayer](https://github.com/k073l/LocalMultiplayer) mod.   |
+| MultiplayerModIL2CPP  | No       | Path to the IL2CPP version of the [LocalMultiplayer](https://github.com/k073l/LocalMultiplayer) mod. |
+| MultiplayerModStarter | No       | Path to the [LocalMultiplayer](https://github.com/k073l/LocalMultiplayer) mod starter bat file.      |
+
 
 You can use parameters to set the paths of other params. For example, you can set the `CommonDir` parameter to the path of the common directory, and then use it to set the paths of the `UnityExplorerMono`, `UnityExplorerIL2CPP`, `MultiplayerModMono`, and `MultiplayerModIL2CPP` parameters. This way, you can keep your configurations readable.
 
