@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>k073l.S1MelonMod</id>
-        <version>1.0.0</version>
+        <version>1.1.0</version>
         <description>Schedule I MelonLoader Mod Template</description>
         <authors>k073l</authors>
         <readme>README.md</readme>
@@ -13,7 +13,7 @@
         <license type="expression">MIT</license>
     </metadata>
     <files>
-        <file src="**" exclude="**/bin/**;**/obj/**;**/.vs/**;**/.git/**;*.nupkg;**/.idea/**;**/assets/**" target="content/" />
+        <file src="**" exclude="**/bin/**;**/obj/**;**/.vs/**;**/.git/**;*.nupkg;**/.idea/**;**/assets-meta/**;.gitignore" target="content/" />
         <file src="README.md" target="README.md" />
     </files>
 </package>

@@ -1,7 +1,7 @@
 ﻿<Project>
     <PropertyGroup>
-        <PostWaitSeconds Condition="'$(TestMultiplayer)' == 'true'">5</PostWaitSeconds>
-        <PostWaitSeconds Condition="'$(TestMultiplayer)' != 'true'">1</PostWaitSeconds>
+        <PostWaitSeconds Condition="'$(IsMultiplayerTest)' == 'true'">5</PostWaitSeconds>
+        <PostWaitSeconds Condition="'$(IsMultiplayerTest)' != 'true'">1</PostWaitSeconds>
     </PropertyGroup>
 
     <Target Name="Kill running S1 instances" AfterTargets="PostBuildEvent" Condition="'$(RunPostBuildEvent)' == 'OnBuildSuccess'">
@@ -33,7 +33,13 @@
         <Exec Command='copy "$(TargetPath)" "$(S1ModsDir)"'/>
 
         <Message Condition="'$(IsMultiplayerTest)' != 'true'" Text="Launching game: $(S1ExePath)" Importance="high" />
-        <Exec Condition="'$(IsMultiplayerTest)' != 'true'" Command='powershell -Command "Start-Process -FilePath \"$(S1ExePath)\""' />
+        <!-- DEBUG defined: run with melonloader debugging -->
+        <Exec Condition="'$(IsMultiplayerTest)' != 'true' and $(DefineConstants.Contains('DEBUG'))"
+            Command="powershell -Command &quot;Start-Process -FilePath '&quot;$(S1ExePath)&quot;' -ArgumentList '--melonloader.launchdebugger','--melonloader.debug'&quot;" />
+
+        <!-- DEBUG not defined: normal launch -->
+        <Exec Condition="'$(IsMultiplayerTest)' != 'true' and !$(DefineConstants.Contains('DEBUG'))"
+            Command="powershell -Command &quot;Start-Process -FilePath '&quot;$(S1ExePath)&quot;'&quot;" />
 
         <Message Condition="'$(IsMultiplayerTest)' == 'true'" Text="Multiplayer mode: launching mod starter..." Importance="high" />
         <Exec Condition="'$(IsMultiplayerTest)' == 'true'"

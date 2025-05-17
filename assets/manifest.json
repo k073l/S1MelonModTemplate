@@ -1,0 +1,10 @@
+{
+    "name": "MyMod",
+    "version_number": "1.0.0",
+    "website_url": "",
+    "description": "does stuff i guess",
+    "dependencies": [
+        "LavaGang-MelonLoader-0.7.0",
+        "the_croods-SwapperPlugin-1.2.1"
+    ]
+}
