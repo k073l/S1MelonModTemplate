@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#nullable enable
+using System.Collections;
 using MelonLoader;
 using UnityEngine;
 //-:cnd:noEmit
@@ -72,12 +73,12 @@ public static class Il2CppListExtensions
     }
 
     /// <summary>
-    /// Converts an Il2Cpp <see cref="Il2CppList.List{T}"/> to a C# <see cref="IEnumerable{T}"/>.
+    /// Converts an Il2Cpp <see cref="Il2CppSystem.Collections.Generic.List{T}"/> to a C# <see cref="IEnumerable{T}"/>.
     /// </summary>
     /// <typeparam name="T">The type of the objects in the list.</typeparam>
     /// <param name="list">The Il2Cpp list to convert.</param>
     /// <returns>A C# <see cref="IEnumerable{T}"/> containing the elements from the Il2Cpp list.</returns>
-    public static IEnumerable<T> AsEnumerable<T>(this Il2CppList.List<T> list)
+    public static IEnumerable<T> AsEnumerable<T>(this Il2CppSystem.Collections.Generic.List<T> list)
     {
         return list == null ? [] : list._items.Take(list._size);
     }
@@ -277,7 +278,7 @@ public static class Utils
     /// <param name="onFinish">Action to execute when the object is not null.</param>
     /// <returns>An enumerator that waits for the object to be not null.</returns>
     public static IEnumerator WaitForNotNull(
-        [MaybeNull] object obj,
+        object? obj,
         float timeout = Single.NaN,
         Action onTimeout = null,
         Action onFinish = null

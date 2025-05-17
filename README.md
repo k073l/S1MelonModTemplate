@@ -7,12 +7,12 @@ This is a template for creating a MelonLoader mod for the game "Schedule I". It 
 - Useful methods for cross-backend compatibility
 - Thunderstore and NexusMods packaging script
 - Cross-backend compatibility: IL2CPP (none/beta branch) and Mono (alternate/alternate-beta branch)
-- Easy build and test process: Select the target configuration, build the mod and the game will be launched automatically
+- Easy build and test process: Select the target configuration, build the mod and the game will be launched automatically (e.g. Debug IL2CPP will build the mod and launch the IL2CPP version of the game with debug options)
 - Automatic testing mod loading: Comment/uncomment lines in .csproj to enable/disable automatic loading of often used mods like UnityExplorer, LocalMultiplayer
 
 ## Usage
 ### Prerequisites
-- [MelonLoader](https://melonwiki.xyz/) and basic knowledge of how to use it
+- [MelonLoader](https://melonwiki.xyz/) and basic knowledge of [how to use it](https://melonwiki.xyz/#/modders/quickstart)
 - .NET SDK (as per MelonLoader requirements)
 - C# IDE (e.g. Rider)
 - [Schedule I](https://store.steampowered.com/app/3164500) ownership

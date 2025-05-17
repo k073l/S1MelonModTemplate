@@ -20,6 +20,7 @@
     <!-- Paths to other mods that script should add (no guard for mono/il2cpp incompat) -->
     <ItemGroup>
         <!--<ModList Include="$(CommonDir)\Mods\DisclaimerSkipMono.dll" />-->
+        <!--<ModList Include="$(CommonDir)\Mods\DisclaimerSkipIL2CPP.dll" />-->
     </ItemGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Debug Mono'">

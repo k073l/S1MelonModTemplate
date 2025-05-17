@@ -33,7 +33,7 @@
             "*.nupkg",
             "*.nuspec",
             "**/.idea/**",
-            "**/assets/**"
+            "**/assets-meta/**"
           ]
         }
       ]
