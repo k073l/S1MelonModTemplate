@@ -97,7 +97,7 @@ Il2CppSystem.Collections.Generic.List<int> il2cppList = new Il2CppSystem.Collect
 List<int> list = il2cppList.ConvertToList();
 ```
 `AsEnumerable<T>` allows you to use LINQ on both Il2Cpp Lists and System Lists.
-```
+```csharp
 var deliveryVehicle = VehicleManager.Instance.AllVehicles.AsEnumerable().FirstOrDefault(); // works both in il2cpp and mono
 // without AsEnumerable we'd need to
 #if MONO
