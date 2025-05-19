@@ -82,7 +82,7 @@ This will create a new file `README-nexus.txt` in root of the project. Then, you
 ![bbcode option in description editor](https://raw.githubusercontent.com/k073l/S1MelonModTemplate/master/assets-meta/bbcode.png)
 and paste it there. You can switch back to normal mode after pasting using the same `BBCode` button and verify that everything looks good.
 
-**Disclaimer:** `convert-readme.ps1` uses [uv](https://docs.astral.sh/uv) to run the Python script responsible for conversion (Python script is embedded in Powershell). As such, this script will contact uv servers to download the tool, drop files (uv.exe, Python script, temp environment). All data will be cleaned up, but since it's contacting the internet you should verify the contents of the script before running it, to make sure for yourself it's not malicious.
+**Disclaimer:** `convert-readme.ps1` uses [uv](https://docs.astral.sh/uv) to run the Python script responsible for conversion (Python script is embedded in Powershell). As such, this script will contact uv servers to download the tool, drop files (uv.exe, Python script, temp environment). All data will be cleaned up, but since it's contacting the internet you should verify the contents of the script before running it, to make sure for yourself it's not malicious. [Script behavior analysis on VirusTotal.](https://www.virustotal.com/gui/file/018ef20da353604ac0ad5d12ba321fb1fb5bff83e07cd0e40c13dc2b3bdb15cf/behavior)
 
 ### Additional information
 Information on S1 modding can be found in the [S1 modding discord](https://discord.gg/9Z5RKEYSzq).
