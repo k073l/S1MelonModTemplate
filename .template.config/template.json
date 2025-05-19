@@ -33,7 +33,8 @@
             "*.nupkg",
             "*.nuspec",
             "**/.idea/**",
-            "**/assets-meta/**"
+            "**/assets-meta/**",
+            "NUGET_CHANGELOG.md"
           ]
         }
       ]

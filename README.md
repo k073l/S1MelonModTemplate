@@ -50,7 +50,7 @@ dotnet new install k073l.S1MelonMod
 
 #### Creating a new mod
 To create a new mod you can use the new solution wizard:
-![solution wizard in Rider](assets-meta/wizard.png)
+![solution wizard in Rider](https://raw.githubusercontent.com/k073l/S1MelonModTemplate/master/assets-meta/wizard.png)
 Alternatively, you can create a new project using the command line:
 ```
 dotnet new S1MelonMod -n MyNewMod \
@@ -74,6 +74,15 @@ You can use parameters to set the paths of other params. For example, you can se
 
 #### Packaging
 This template includes Thunderstore and NexusMods packaging script. Once both IL2CPP and Mono builds were built and tested, you can fill out `assets/manifest.json` and drop in your `icon.png`. Then simply run `assets/package-mod.ps1`. You should see 3 zip files in assets directory. Thunderstore package `*-TS.zip` will contain `manifest.json`, `icon.png`, `README.md`, `CHANGELOG.md` and both `.dll` files for IL2CPP and Mono versions of your mod. NexusMods zips are `*-IL2CPP.zip` and `*-Mono.zip`. They contain only the mod files.
+
+##### README.md conversion to NexusMods description
+In `assets/` you can find `README.md` to `NexusMods` description conversion script. It will convert the `README.md` file to a format that is compatible with NexusMods description. You can run it using:
+`.\assets\convert-readme.ps1`.
+This will create a new file `README-nexus.txt` in root of the project. Then, you can copy the content of this file, switch description editor mode to `BBCode`
+![bbcode option in description editor](https://raw.githubusercontent.com/k073l/S1MelonModTemplate/master/assets-meta/bbcode.png)
+and paste it there. You can switch back to normal mode after pasting using the same `BBCode` button and verify that everything looks good.
+
+**Disclaimer:** `convert-readme.ps1` uses [uv](https://docs.astral.sh/uv) to run the Python script responsible for conversion (Python script is embedded in Powershell). As such, this script will contact uv servers to download the tool, drop files (uv.exe, Python script, temp environment). All data will be cleaned up, but since it's contacting the internet you should verify the contents of the script before running it, to make sure for yourself it's not malicious.
 
 ### Additional information
 Information on S1 modding can be found in the [S1 modding discord](https://discord.gg/9Z5RKEYSzq).
