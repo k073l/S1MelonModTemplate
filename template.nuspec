@@ -7,16 +7,17 @@
         <authors>k073l</authors>
         <readme>README.md</readme>
         <projectUrl>https://github.com/k073l/S1MelonModTemplate</projectUrl>
+        <icon>assets-meta/icon.png</icon>
         <packageTypes>
             <packageType name="Template" />
         </packageTypes>
         <releaseNotes>
-            - Added README.md to NexusMods description conversion script
+            - Added icon
         </releaseNotes>
         <license type="expression">MIT</license>
     </metadata>
     <files>
-        <file src="**" exclude="**/bin/**;**/obj/**;**/.vs/**;**/.git/**;*.nupkg;**/.idea/**;**/assets-meta/**;.gitignore" target="content/" />
+        <file src="**" exclude="**/bin/**;**/obj/**;**/.vs/**;**/.git/**;*.nupkg;**/.idea/**;.gitignore" target="content/" />
         <file src="README.md" target="README.md" />
         <file src="NUGET_CHANGELOG.md" target="NUGET_CHANGELOG.md" />
     </files>
