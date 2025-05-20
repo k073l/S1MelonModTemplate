@@ -8,7 +8,7 @@
         <tags>melonloader template mod modding schedule-one schedule-1 schedule il2cpp mono</tags>
         <readme>README.md</readme>
         <projectUrl>https://github.com/k073l/S1MelonModTemplate</projectUrl>
-        <icon>assets-meta/icon.png</icon>
+        <icon>content/assets-meta/icon.png</icon>
         <packageTypes>
             <packageType name="Template" />
         </packageTypes>
