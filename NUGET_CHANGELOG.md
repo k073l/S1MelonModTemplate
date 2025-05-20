@@ -1,7 +1,8 @@
 # Changelog
 
-## 1.3.0
+## 1.2.1
 - Added icon
+- Added tags
 ## 1.2.0
 - Added README.md to NexusMods description conversion script
 ## 1.1.0
