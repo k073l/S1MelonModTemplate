@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>k073l.S1MelonMod</id>
-        <version>1.2.1</version>
+        <version>1.3.0</version>
         <description>Schedule I MelonLoader Mod Template</description>
         <authors>k073l</authors>
         <tags>melonloader template mod modding schedule-one schedule-1 schedule il2cpp mono</tags>
@@ -13,8 +13,7 @@
             <packageType name="Template" />
         </packageTypes>
         <releaseNotes>
-            - Added icon
-            - Added tags
+            - Fix assembly paths in packaging script
         </releaseNotes>
         <license type="expression">MIT</license>
     </metadata>

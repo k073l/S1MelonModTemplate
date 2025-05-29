@@ -1,5 +1,7 @@
 # Changelog
 
+## 1.3.0
+- Fix assembly paths in packaging script
 ## 1.2.1
 - Added icon
 - Added tags
