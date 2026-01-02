@@ -18,8 +18,10 @@
         <license type="expression">MIT</license>
     </metadata>
     <files>
-        <file src="**" exclude="**/bin/**;**/obj/**;**/.vs/**;**/.git/**;*.nupkg;**/.idea/**;.gitignore" target="content/" />
+        <file src="template/" exclude="**/bin/**;**/obj/**;**/.vs/**;**/.git/**;*.nupkg;**/.idea/**;.gitignore" target="content/" />
+        <file src=".template.config/" target="content/.template.config/" />
+        <file src="assets-meta/" target="content/assets-meta/" />
         <file src="README.md" target="README.md" />
-        <file src="NUGET_CHANGELOG.md" target="NUGET_CHANGELOG.md" />
+        <file src="CHANGELOG.md" target="CHANGELOG.md" />
     </files>
 </package>

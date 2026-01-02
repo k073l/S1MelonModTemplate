@@ -34,7 +34,7 @@
             "*.nuspec",
             "**/.idea/**",
             "**/assets-meta/**",
-            "NUGET_CHANGELOG.md"
+            "CHANGELOG.md"
           ]
         }
       ]
