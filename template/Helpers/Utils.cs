@@ -2,6 +2,8 @@
 using System.Collections;
 using MelonLoader;
 using UnityEngine;
+using Color = UnityEngine.Color;
+
 //-:cnd:noEmit
 #if MONO
 using ScheduleOne;
@@ -39,6 +41,23 @@ public static class Il2CppListExtensions
     public static IEnumerable<T> AsEnumerable<T>(this List<T> list)
     {
         return list ?? [];
+    }
+
+    /// <summary>
+    /// Converts the provided list to a backend-native list.
+    /// On Il2Cpp, returns an Il2CppSystem.Collections.Generic.List{T}.
+    /// On Mono, returns a System.Collections.Generic.List{T}.
+    /// </summary>
+    /// <typeparam name="T">The type of the objects in the collection.</typeparam>
+    /// <param name="source">The source list to convert.</param>
+    /// <returns>A backend-native list containing the elements of the source.</returns>
+    public static object ToNativeList<T>(this List<T> source)
+    {
+#if !MONO
+        return source.ToIl2CppList();
+#else
+        return source ?? new List<T>(); // already native
+#endif
     }
 
 #if !MONO
@@ -82,6 +101,19 @@ public static class Il2CppListExtensions
     {
         return list == null ? [] : list._items.Take(list._size);
     }
+
+    /// <summary>
+    /// Converts the provided Il2Cpp list to a backend-native list.
+    /// On Il2Cpp, returns an Il2CppSystem.Collections.Generic.List{T}.
+    /// On Mono, this method is not available.
+    /// </summary>
+    /// <typeparam name="T">The type of the objects in the collection.</typeparam>
+    /// <param name="source">The source Il2Cpp list to convert.</param>
+    /// <returns>A backend-native list containing the elements of the source.</returns>
+    public static object ToNativeList<T>(this Il2CppSystem.Collections.Generic.List<T> source)
+    {
+        return source; // already native
+    }
 #endif
 }
 
@@ -106,7 +138,7 @@ public static class Utils
     /// var sprite = FindObjectByName&lt;‌Sprite‌&gt;("Dan_Mugshot");
     /// </code>
     /// </example>
-    public static T FindObjectByName<T>(string objectName)
+    public static T? FindObjectByName<T>(string objectName)
         where T : UnityEngine.Object
     {
         try
@@ -181,7 +213,7 @@ public static class Utils
     /// }
     /// </code>
     /// </example>
-    public static bool Is<T>(object obj, out T result)
+    public static bool Is<T>(object obj, out T? result)
 #if !MONO
         where T : Object
 #else
@@ -208,38 +240,8 @@ public static class Utils
         }
 #endif
 
-        result = null!;
+        result = null;
         return false;
-    }
-
-    /// <summary>
-    /// Gets all storable item definitions from the item registry.
-    /// </summary>
-    /// <returns>A list of all storable item definitions.</returns>
-    public static List<StorableItemDefinition> GetAllStorableItemDefinitions()
-    {
-#if !MONO
-        var itemRegistry = Il2CppListExtensions.ConvertToList(Registry.Instance.ItemRegistry);
-#else
-        var itemRegistry = Registry.Instance.ItemRegistry.ToList();
-#endif
-        var itemDefinitions = new List<StorableItemDefinition>();
-
-        foreach (var item in itemRegistry)
-        {
-            if (Utils.Is<StorableItemDefinition>(item.Definition, out var definition))
-            {
-                itemDefinitions.Add(definition);
-            }
-            else
-            {
-                Logger.Warning(
-                    $"Definition {item.Definition?.GetType().FullName} is not a StorableItemDefinition"
-                );
-            }
-        }
-
-        return itemDefinitions.ToList();
     }
 
     /// <summary>
@@ -270,23 +272,23 @@ public static class Utils
     }
 
     /// <summary>
-    /// Waits for the given object to be not null.
+    /// Waits until the given condition is true, with optional timeout and callbacks.
     /// </summary>
-    /// <param name="obj">The object to check.</param>
-    /// <param name="timeout">The timeout in seconds. If NaN, no timeout is applied.</param>
-    /// <param name="onTimeout">Action to execute when the timeout is reached.</param>
-    /// <param name="onFinish">Action to execute when the object is not null.</param>
-    /// <returns>An enumerator that waits for the object to be not null.</returns>
-    public static IEnumerator WaitForNotNull(
-        object? obj,
+    /// <param name="condition">The condition to wait for.</param>
+    /// <param name="timeout">The maximum time to wait in seconds. If NaN, waits indefinitely.</param>
+    /// <param name="onTimeout">Action to invoke if the timeout is reached.</param>
+    /// <param name="onFinish">Action to invoke when the condition is met.</param>
+    /// <returns></returns>
+    public static IEnumerator WaitForCondition(
+        System.Func<bool> condition,
         float timeout = Single.NaN,
-        Action onTimeout = null,
-        Action onFinish = null
+        Action? onTimeout = null,
+        Action? onFinish = null
     )
     {
-        float startTime = Time.time;
+        var startTime = Time.time;
 
-        while (obj == null)
+        while (!condition())
         {
             if (!float.IsNaN(timeout) && Time.time - startTime > timeout)
             {
@@ -300,17 +302,84 @@ public static class Utils
     }
 
     /// <summary>
-    /// Waits for the given NetworkSingleton to be ready before starting the given coroutine.
+    /// Gets the full hierarchy path of a Transform.
     /// </summary>
-    /// <typeparam name="T">The type of the NetworkSingleton.</typeparam>
-    /// <param name="coroutine">The coroutine to start when the NetworkSingleton is ready.</param>
-    /// <returns>An enumerator that waits for the NetworkSingleton to be ready.</returns>
-    public static IEnumerator WaitForNetworkSingleton<T>(IEnumerator coroutine)
-        where T : NetworkSingleton<T>
+    /// <param name="transform">The Transform to get the path for.</param>
+    /// <returns>The full hierarchy path.</returns>
+    public static string GetHierarchyPath(this Transform transform)
     {
-        while (!NetworkSingleton<T>.InstanceExists)
-            yield return null;
+        if (transform == null) return "null";
 
-        yield return coroutine;
+        var path = transform.name;
+        var current = transform.parent;
+
+        while (current != null)
+        {
+            path = current.name + "/" + path;
+            current = current.parent;
+        }
+
+        return path;
+    }
+
+    /// <summary>
+    /// Gets a component or adds it if it doesn't exist.
+    /// </summary>
+    /// <typeparam name="T">The type of component.</typeparam>
+    /// <param name="gameObject">The GameObject to get or add the component to.</param>
+    /// <returns>The existing component or a newly added one.</returns>
+    public static T GetOrAddComponent<T>(this GameObject gameObject) where T : Component
+    {
+        var component = gameObject.GetComponent<T>();
+        if (component != null) return component;
+        component = gameObject.AddComponent<T>();
+        Logger.Debug($"Added component {typeof(T).Name} to GameObject {gameObject.name}");
+    }
+
+    /// <summary>
+    /// Draws debug visuals on the given GameObject by replacing its material with a transparent colored one.
+    /// </summary>
+    /// <param name="gameObject">The GameObject to draw debug visuals on.</param>
+    /// <param name="color">The color to use for the debug visuals.</param>
+    /// <returns>The original material of the GameObject's renderer.</returns>
+    public static Material? DrawDebugVisuals(this GameObject gameObject, Color? color = null)
+    {
+        var renderer = gameObject.GetComponent<Renderer>();
+        if (renderer == null)
+        {
+            Logger.Error($"GameObject {gameObject.name} has no Renderer component");
+            return null;
+        }
+
+        color ??= new Color(1f, 0f, 1f, 0.5f);
+
+        var shader = Shader.Find("Universal Render Pipeline/Lit");
+        if (shader == null)
+            return null;
+
+        var mat = new Material(shader);
+
+        if (mat.HasProperty("_Surface"))
+            mat.SetFloat("_Surface", 1f);
+
+        var baseColor = color.Value;
+        if (baseColor.a <= 0f)
+            baseColor.a = 0.2f;
+
+        if (mat.HasProperty("_BaseColor"))
+            mat.SetColor("_BaseColor", baseColor);
+
+        if (mat.HasProperty("_EmissionColor"))
+        {
+            mat.EnableKeyword("_EMISSION");
+            mat.SetColor("_EmissionColor", new Color(baseColor.r, baseColor.g, baseColor.b) * 1.5f);
+        }
+
+        mat.SetInt("_ZWrite", 0);
+        mat.renderQueue = 3000;
+
+        var originalMaterial = renderer.material;
+        renderer.material = mat;
+        return originalMaterial;
     }
 }

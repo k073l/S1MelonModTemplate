@@ -19,6 +19,15 @@ using Il2CppFishNet;
 [assembly: MelonColor(1, 255, 0, 0)]
 [assembly: MelonGame("TVGS", "Schedule I")]
 
+//-:cnd:noEmit
+// Specify platform domain based on build target (remove this if your mod supports both via S1API)
+#if MONO
+[assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
+#else
+[assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.IL2CPP)]
+#endif
+//+:cnd:noEmit
+
 namespace MyMod;
 
 public static class BuildInfo
@@ -37,7 +46,6 @@ public class MyMod : MelonMod
     {
         Logger = LoggerInstance;
         Logger.Msg("MyMod initialized");
-        Logger.Debug("This will only show in debug mode");
     }
 
     public override void OnSceneWasLoaded(int buildIndex, string sceneName)
@@ -47,9 +55,6 @@ public class MyMod : MelonMod
         {
             Logger.Debug("Main scene loaded, waiting for player");
             MelonCoroutines.Start(Utils.WaitForPlayer(DoStuff()));
-
-            Logger.Debug("Main scene loaded, waiting for network");
-            MelonCoroutines.Start(Utils.WaitForNetwork(DoNetworkStuff()));
         }
     }
 
@@ -58,21 +63,5 @@ public class MyMod : MelonMod
         Logger.Msg("Player ready, doing stuff...");
         yield return new WaitForSeconds(2f);
         Logger.Msg("Did some stuff!");
-    }
-
-    private IEnumerator DoNetworkStuff()
-    {
-        Logger.Msg("Network ready, doing network stuff...");
-        var nm = InstanceFinder.NetworkManager;
-        if (nm.IsServer && nm.IsClient)
-            Logger.Debug("Host");
-        else if (!nm.IsServer && !nm.IsClient)
-            Logger.Debug("Singleplayer");
-        else if (nm.IsClient && !nm.IsServer)
-            Logger.Debug("Client-only");
-        else if (nm.IsServer && !nm.IsClient)
-            Logger.Debug("Server-only");
-        yield return new WaitForSeconds(2f);
-        Logger.Msg("Did some network stuff!");
     }
 }

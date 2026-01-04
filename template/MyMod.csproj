@@ -2,9 +2,10 @@
     <Import Project="build/paths.props"/>
 
     <PropertyGroup>
-        <!-- Testing props -->
+        <!-- Testing props, comment or uncomment what you need -->
         <!--<DefineConstants>$(DefineConstants);TestMultiplayer</DefineConstants>-->
         <!--<DefineConstants>$(DefineConstants);UnityExplorer</DefineConstants>-->
+        <!-- <DefineConstants>$(DefineConstants);DEBUG</DefineConstants> -->
 
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
@@ -14,7 +15,7 @@
 
         <RootNamespace>MyMod</RootNamespace>
 
-        <Configurations>Debug Mono;Release Mono;Debug IL2CPP;Release IL2CPP</Configurations>
+        <Configurations>Mono;IL2CPP</Configurations>
     </PropertyGroup>
 
     <!-- Paths to other mods that script should add (no guard for mono/il2cpp incompat) -->
@@ -23,30 +24,22 @@
         <!--<ModList Include="$(CommonDir)\Mods\DisclaimerSkipIL2CPP.dll" />-->
     </ItemGroup>
 
-    <PropertyGroup Condition="'$(Configuration)' == 'Debug Mono'">
+    <PropertyGroup Condition="'$(Configuration)' == 'Mono'">
         <DefineConstants>$(DefineConstants);MONO</DefineConstants>
     </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)' == 'Release Mono'">
-        <DefineConstants>$(DefineConstants);MONO;RELEASE</DefineConstants>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)' == 'Debug IL2CPP'">
+    <PropertyGroup Condition="'$(Configuration)' == 'IL2CPP'">
         <DefineConstants>$(DefineConstants)</DefineConstants>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)' == 'Release IL2CPP'">
-        <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
     </PropertyGroup>
     
 
     <Import Project="build/conditions.props"/>
 
     <ItemGroup Label="Publicizer" Condition="'$(IsMono)' == 'true'">
-        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.5.0-beta.1">
+        <PackageReference Include="Krafs.Publicizer" Version="2.3.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <Publicize Include="Assembly-CSharp"/>
     </ItemGroup>
 
     <!-- MelonLoader References -->

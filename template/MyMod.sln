@@ -6,20 +6,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMod", "MyMod.csproj", "{8
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug IL2CPP|Any CPU = Debug IL2CPP|Any CPU
-		Debug Mono|Any CPU = Debug Mono|Any CPU
-		Release IL2CPP|Any CPU = Release IL2CPP|Any CPU
-		Release Mono|Any CPU = Release Mono|Any CPU
+		IL2CPP|Any CPU = IL2CPP|Any CPU
+		Mono|Any CPU = Mono|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8352B867-0BEC-4D6C-B93C-EFA516BEE616}.Debug IL2CPP|Any CPU.ActiveCfg = Debug IL2CPP|Any CPU
-		{8352B867-0BEC-4D6C-B93C-EFA516BEE616}.Debug IL2CPP|Any CPU.Build.0 = Debug IL2CPP|Any CPU
-		{8352B867-0BEC-4D6C-B93C-EFA516BEE616}.Debug Mono|Any CPU.ActiveCfg = Debug Mono|Any CPU
-		{8352B867-0BEC-4D6C-B93C-EFA516BEE616}.Debug Mono|Any CPU.Build.0 = Debug Mono|Any CPU
-		{8352B867-0BEC-4D6C-B93C-EFA516BEE616}.Release IL2CPP|Any CPU.ActiveCfg = Release IL2CPP|Any CPU
-		{8352B867-0BEC-4D6C-B93C-EFA516BEE616}.Release IL2CPP|Any CPU.Build.0 = Release IL2CPP|Any CPU
-		{8352B867-0BEC-4D6C-B93C-EFA516BEE616}.Release Mono|Any CPU.ActiveCfg = Release Mono|Any CPU
-		{8352B867-0BEC-4D6C-B93C-EFA516BEE616}.Release Mono|Any CPU.Build.0 = Release Mono|Any CPU
+		{8352B867-0BEC-4D6C-B93C-EFA516BEE616}.IL2CPP|Any CPU.ActiveCfg = IL2CPP|Any CPU
+		{8352B867-0BEC-4D6C-B93C-EFA516BEE616}.IL2CPP|Any CPU.Build.0 = IL2CPP|Any CPU
+		{8352B867-0BEC-4D6C-B93C-EFA516BEE616}.Mono|Any CPU.ActiveCfg = Mono|Any CPU
+		{8352B867-0BEC-4D6C-B93C-EFA516BEE616}.Mono|Any CPU.Build.0 = Mono|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

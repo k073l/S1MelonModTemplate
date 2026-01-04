@@ -2,47 +2,71 @@
     <PropertyGroup>
         <PostWaitSeconds Condition="'$(IsMultiplayerTest)' == 'true'">5</PostWaitSeconds>
         <PostWaitSeconds Condition="'$(IsMultiplayerTest)' != 'true'">1</PostWaitSeconds>
+        
+        <!-- Python postbuild script location -->
+        <PostBuildScript>"$(MSBuildProjectDirectory)\build\events\postbuild.py"</PostBuildScript>
+        
+        <!-- Unix/Wine configuration -->
+        <WineBinary Condition="'$(OS)' != 'Windows_NT' and '$(WineBinary)' == ''">wine</WineBinary>
+        <WinePrefix Condition="'$(OS)' != 'Windows_NT' and '$(WinePrefix)' == ''"></WinePrefix>
     </PropertyGroup>
 
-    <Target Name="Kill running S1 instances" AfterTargets="PostBuildEvent" Condition="'$(RunPostBuildEvent)' == 'OnBuildSuccess'">
-        <Message Text="Checking for running S1 instances..." Importance="high" />
-        <Exec Command='(tasklist | findstr /I "Schedule.*I.exe" &gt;nul || exit 0) &amp;&amp; taskkill /F /IM "$(S1ExeName)"' />
-        <Message Text="Waiting for S1 processes to terminate..." Importance="normal" />
-        <Exec Command='powershell -Command "while (Get-Process -Name \"$(S1ExeName)\" -ErrorAction SilentlyContinue) { Start-Sleep -Milliseconds 200 }; Start-Sleep -Seconds $(PostWaitSeconds)"' />
-    </Target>
-
-    <Target Name="Clean mod folder and copy requested mods" AfterTargets="PostBuildEvent" Condition="'$(RunPostBuildEvent)' == 'OnBuildSuccess'">
-        <Message Text="Cleaning mods directory: $(S1ModsDir)" Importance="high" />
-        <Exec Command='powershell -Command "Remove-Item \"$(S1ModsDir)\*\" -Recurse -Force"' />
-
-        <Message Condition="'@(ModList)' != ''" Text="Checking if mods in ModList exist..." Importance="high" />
-        <Message Condition="'@(ModList)' == ''" Text="No mods defined in ModList; skipping mod copy." Importance="normal" />
-        <Exec Condition="'@(ModList)' != ''" WorkingDirectory="$(ProjectDir)"
-              Command="powershell -Command &quot;&amp; { if (Test-Path '%(ModList.Identity)') { Copy-Item '%(ModList.Identity)' '$(S1ModsDir)' } else { Write-Host 'Mod not found: %(ModList.Identity)' } }&quot;" />
+    <Target Name="DetectS1API" BeforeTargets="PostBuild">
+        <!-- Check if S1API is referenced (either as assembly or NuGet package) -->
+        <ItemGroup>
+            <S1APIReferenceCheck Include="@(Reference)" Condition="$([System.String]::Copy('%(Identity)').StartsWith('S1API'))" />
+            <S1APIPackageCheck Include="@(PackageReference)" Condition="$([System.String]::Copy('%(Identity)').StartsWith('S1API'))" />
+        </ItemGroup>
         
-        <Message Condition="'$(IsMultiplayerTest)' == 'true'" Text="Multiplayer testing. Copying LocalMultiplayer mod and starter" Importance="high" />
-        <Exec Condition="'$(IsMultiplayerTest)' == 'true'" Command='powershell -Command "Copy-Item \"$(MultiplayerMod)\" \"$(S1ModsDir)\""' />
-        <Exec Condition="'$(IsMultiplayerTest)' == 'true'" Command='powershell -Command "Copy-Item \"$(MultiplayerModStarter)\" \"$(S1Dir)\""' />
-
-        <Message Condition="'$(IsUnityExplorer)' == 'true'" Text="UnityExplorer enabled. Copying UnityExplorer mod..." Importance="high" />
-        <Exec Condition="'$(IsUnityExplorer)' == 'true'" Command='powershell -Command "Copy-Item \"$(UnityExplorer)\" \"$(S1ModsDir)\""' />
+        <PropertyGroup>
+            <HasS1APIReference Condition="'@(S1APIReferenceCheck)' != '' or '@(S1APIPackageCheck)' != ''">true</HasS1APIReference>
+        </PropertyGroup>
+        
+        <Message Condition="'$(HasS1APIReference)' == 'true'" Text="S1API reference detected" Importance="normal" />
     </Target>
 
-    <Target Name="Copy built mod and run the game" AfterTargets="PostBuildEvent" Condition="'$(RunPostBuildEvent)' == 'OnBuildSuccess'">
-        <Message Text="Copying built mod to mods directory..." Importance="high" />
-        <Exec Command='copy "$(TargetPath)" "$(S1ModsDir)"'/>
-
-        <Message Condition="'$(IsMultiplayerTest)' != 'true'" Text="Launching game: $(S1ExePath)" Importance="high" />
-        <!-- DEBUG defined: run with melonloader debugging -->
-        <Exec Condition="'$(IsMultiplayerTest)' != 'true' and $(DefineConstants.Contains('DEBUG'))"
-            Command="powershell -Command &quot;Start-Process -FilePath '&quot;$(S1ExePath)&quot;' -ArgumentList '--melonloader.launchdebugger','--melonloader.debug'&quot;" />
-
-        <!-- DEBUG not defined: normal launch -->
-        <Exec Condition="'$(IsMultiplayerTest)' != 'true' and !$(DefineConstants.Contains('DEBUG'))"
-            Command="powershell -Command &quot;Start-Process -FilePath '&quot;$(S1ExePath)&quot;'&quot;" />
-
-        <Message Condition="'$(IsMultiplayerTest)' == 'true'" Text="Multiplayer mode: launching mod starter..." Importance="high" />
-        <Exec Condition="'$(IsMultiplayerTest)' == 'true'"
-              Command='powershell -Command "Start-Process -FilePath \"$(MultiplayerModStarter)\" -WorkingDirectory \"$(S1Dir)\""' />
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(RunPostBuildEvent)' == 'OnBuildSuccess'" DependsOnTargets="DetectS1API">
+        <Message Text="Running post-build script..." Importance="high" />
+        
+        <!-- Base arguments -->
+        <PropertyGroup>
+            <PostBuildArgs>"$(TargetPath)" "$(S1ModsDir)" "$(S1ExePath)"</PostBuildArgs>
+            <PostBuildArgs>$(PostBuildArgs) --project-dir "$(MSBuildProjectDirectory)"</PostBuildArgs>
+            <PostBuildArgs>$(PostBuildArgs) --wait-seconds $(PostWaitSeconds)</PostBuildArgs>
+        </PropertyGroup>
+        
+        <!-- Add user mods from ModList -->
+        <PropertyGroup Condition="'@(ModList)' != ''">
+            <PostBuildArgs>$(PostBuildArgs) @(ModList -> '--mod "%(Identity)"', ' ')</PostBuildArgs>
+        </PropertyGroup>
+        
+        <!-- Add multiplayer mods if enabled -->
+        <PropertyGroup Condition="'$(IsMultiplayerTest)' == 'true'">
+            <PostBuildArgs>$(PostBuildArgs) --mp-mod "$(MultiplayerMod)"</PostBuildArgs>
+            <PostBuildArgs>$(PostBuildArgs) --mp-starter "$(MultiplayerModStarter)"</PostBuildArgs>
+        </PropertyGroup>
+        
+        <!-- Add UnityExplorer if enabled -->
+        <PropertyGroup Condition="'$(IsUnityExplorer)' == 'true'">
+            <PostBuildArgs>$(PostBuildArgs) --unity-explorer-path "$(UnityExplorer)"</PostBuildArgs>
+        </PropertyGroup>
+        
+        <!-- Add S1API if it is referenced -->
+        <PropertyGroup Condition="'$(HasS1APIReference)' == 'true'">
+            <PostBuildArgs>$(PostBuildArgs) --s1api-path "$(S1API)"</PostBuildArgs>
+        </PropertyGroup>
+        
+        <!-- Add debug flag if DEBUG is defined -->
+        <PropertyGroup Condition="$(DefineConstants.Contains('DEBUG'))">
+            <PostBuildArgs>$(PostBuildArgs) --debug</PostBuildArgs>
+        </PropertyGroup>
+        
+        <!-- Add Wine args on non-Windows -->
+        <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
+            <PostBuildArgs>$(PostBuildArgs) --wine-binary "$(WineBinary)"</PostBuildArgs>
+            <PostBuildArgs Condition="'$(WinePrefix)' != ''">$(PostBuildArgs) --wine-prefix "$(WinePrefix)"</PostBuildArgs>
+        </PropertyGroup>
+        
+        <Exec Command="uv run --script $(PostBuildScript) $(PostBuildArgs)" ConsoleToMsBuild="true" EchoOff="false" />
     </Target>
 </Project>

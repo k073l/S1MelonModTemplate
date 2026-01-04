@@ -6,8 +6,9 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <UnityExplorer Condition="'$(IsMono)' == 'true'">UEMONO</UnityExplorer>
-        <UnityExplorer Condition="'$(IsMono)' != 'true'">UEIL2CPP</UnityExplorer>
+        <UnityExplorer Condition="'$(IsMono)' == 'true'">UEROOT\UnityExplorer.ML.Mono.dll</UnityExplorer>
+        <UnityExplorer Condition="'$(IsMono)' != 'true'">UEROOT\UnityExplorer.ML.IL2CPP.CoreCLR.dll</UnityExplorer>
+        <S1API>S1APIROOT</S1API>
         <MultiplayerMod Condition="'$(IsMono)' == 'true'">MULTIPLAYERMOD</MultiplayerMod>
         <MultiplayerMod Condition="'$(IsMono)' != 'true'">MULTIPLAYERMODIL2CPP</MultiplayerMod>
         <MultiplayerModStarter>MULTIPLAYERMODSTARTER</MultiplayerModStarter>

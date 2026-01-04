@@ -1,0 +1,37 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://qconsulting.ca/fo3/ModConfig5.0.xsd">
+
+    <moduleName>MyMod</moduleName>
+    <moduleImage path="icon.png"/>
+
+    <installSteps>
+        <installStep name="Select your game branch">
+            <optionalFileGroups order="Explicit">
+                <group name="Pick a version of the mod (hover over options for descriptions)" type="SelectExactlyOne">
+                    <plugins order="Explicit">
+                        <plugin name="IL2CPP (none/beta)">
+                            <description>Pick this version if you're playing on IL2CPP. &#10;This may be also known as NONE/BETA in Steam's beta participation. &#10;If you're unsure, you're likely on main, stable (none) release and thus you should pick this version.
+                            </description>
+                            <files>
+                                <file source="MyMod-IL2CPP.dll" destination="Mods/MyMod-IL2CPP.dll"/>
+                            </files>
+                            <typeDescriptor>
+                                <type name="Recommended"/>
+                            </typeDescriptor>
+                        </plugin>
+                        <plugin name="Mono (alternate/alternate beta)">
+                            <description>Pick this version if you're playing on Mono. &#10;This may be also known as ALTERNATE/ALTERNATE BETA in Steam's beta participation.
+                            </description>
+                            <files>
+                                <file source="MyMod-Mono.dll" destination="Mods/MyMod-Mono.dll"/>
+                            </files>
+                            <typeDescriptor>
+                                <type name="Optional"/>
+                            </typeDescriptor>
+                        </plugin>
+                    </plugins>
+                </group>
+            </optionalFileGroups>
+        </installStep>
+    </installSteps>
+</config>

@@ -33,9 +33,19 @@
             "*.nupkg",
             "*.nuspec",
             "**/.idea/**",
-            "**/assets-meta/**",
-            "CHANGELOG.md"
+            "**/assets-meta/**"
           ]
+        },
+        {
+          "copyOnly": [
+            "build/events/postBuild.targets",
+            "build/events/preBuild.targets"
+          ]
+        },
+        {
+          "rename": {
+            "gitignore": ".gitignore"
+          }
         }
       ]
     }
@@ -65,21 +75,23 @@
       "description": "Path to Common location. This could be used to store commonly used mods in one place.",
       "replaces": "COMMONDIR"
     },
-    "UnityExplorerMono": {
-      "displayName": "UnityExplorer Mod Location (Mono)",
+    "UnityExplorerRoot": {
+      "displayName": "UnityExplorer Mod Location",
       "type": "parameter",
       "dataType": "string",
       "isRequired": false,
-      "description": "Path to UnityExplorer Mod Location for Mono. UnityExplorer is a mod that helps you debug GameObjects and their components.",
-      "replaces": "UEMONO"
+      "defaultValue": "$(CommonDir)\\UnityExplorer",
+      "description": "Path to UnityExplorer Mod Location. UnityExplorer is a mod that helps you debug GameObjects and their components.",
+      "replaces": "UEROOT"
     },
-    "UnityExplorerIL2CPP": {
-      "displayName": "UnityExplorer Mod Location (IL2CPP)",
+    "S1APIRoot": {
+      "displayName": "S1API Mod Location",
       "type": "parameter",
       "dataType": "string",
       "isRequired": false,
-      "description": "Path to UnityExplorer Mod Location for IL2CPP. UnityExplorer is a mod that helps you debug GameObjects and their components.",
-      "replaces": "UEIL2CPP"
+      "defaultValue": "$(CommonDir)\\S1API",
+      "description": "Path to S1API Mod Location. S1API is a mod that provides an API for Schedule I mods.",
+      "replaces": "S1APIROOT"
     },
     "MultiplayerModMono": {
       "displayName": "Multiplayer Mod Location",

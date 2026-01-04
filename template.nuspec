@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>k073l.S1MelonMod</id>
-        <version>1.3.0</version>
+        <version>2.0.0</version>
         <description>Schedule I MelonLoader Mod Template</description>
         <authors>k073l</authors>
         <tags>melonloader template mod modding schedule-one schedule-1 schedule il2cpp mono</tags>
@@ -13,13 +13,18 @@
             <packageType name="Template" />
         </packageTypes>
         <releaseNotes>
-            - Fix assembly paths in packaging script
+            - Restructure the template
+            - Migrate helper scripts and complex post-build logic to uv managed Python scripts
+            - Add bumper script for easier releases
+            - Add preliminary cross-platform support (can use Wine!)
+            - Add fomod support - one zip for TS and Nexus
+            - Migrate to MelonDebug, but keep Logger.Debug extension for convenience
+            - New Utils methods
         </releaseNotes>
         <license type="expression">MIT</license>
     </metadata>
     <files>
-        <file src="template/" exclude="**/bin/**;**/obj/**;**/.vs/**;**/.git/**;*.nupkg;**/.idea/**;.gitignore" target="content/" />
-        <file src=".template.config/" target="content/.template.config/" />
+        <file src="template/" exclude="**/bin/**;**/obj/**;**/.vs/**;**/.git/**;*.nupkg;**/.idea/**" target="content/" />
         <file src="assets-meta/" target="content/assets-meta/" />
         <file src="README.md" target="README.md" />
         <file src="CHANGELOG.md" target="CHANGELOG.md" />

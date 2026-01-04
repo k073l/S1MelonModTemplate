@@ -1,6 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Drawing;
-using System.Reflection;
 using MelonLoader;
 
 namespace MyMod.Helpers;
@@ -10,9 +8,10 @@ public static class MelonLoggerExtensions
 {
     /// <summary>
     /// Logs a debug message to the console.
-    /// This method only works in Debug builds. In Release builds, it does nothing.
+    /// Can provide caller info, otherwise it's just a convenience method to MelonDebug.
+    /// This method only works when running with --melonloader.debug
     /// </summary>
-    /// <param name="logger">The logger instance to use.</param>
+    /// <param name="logger">Logger instance, isn't used.</param>
     /// <param name="message">The message to log.</param>
     /// <param name="stacktrace">Whether to include the stack trace in the log message. Defaults to true.</param>
     public static void Debug(
@@ -21,55 +20,7 @@ public static class MelonLoggerExtensions
         bool stacktrace = true
     )
     {
-#if RELEASE
-        // Suppress debug logs in Release
-#else
-        var melon = MelonUtils.GetMelonFromStackTrace();
-        var namesection_color = MelonLogger.DefaultMelonColor;
-        if (melon is { Info: not null })
-            namesection_color = melon.ConsoleColor;
-
-        var name = GetLoggerName(logger);
-        var finalMessage = stacktrace
-            ? $"[DEBUG] {GetCallerInfo()} - {message}"
-            : $"[DEBUG] {message}";
-
-        InvokeNativeMsg(namesection_color, MelonLogger.DefaultTextColor, name, finalMessage);
-#endif
-    }
-
-    private static string GetLoggerName(MelonLogger.Instance logger)
-    {
-        var field = typeof(MelonLogger.Instance).GetField(
-            "Name",
-            BindingFlags.NonPublic | BindingFlags.Instance
-        );
-        return field?.GetValue(logger) as string;
-    }
-
-    private static void InvokeNativeMsg(
-        Color namesectionColor,
-        Color textColor,
-        string nameSection,
-        string message
-    )
-    {
-        var method = typeof(MelonLogger).GetMethod(
-            "NativeMsg",
-            BindingFlags.NonPublic | BindingFlags.Static
-        );
-
-        method?.Invoke(
-            null,
-            new object[]
-            {
-                namesectionColor,
-                textColor,
-                nameSection,
-                message ?? "null",
-                false, // skipStackWalk
-            }
-        );
+        MelonDebug.Msg(stacktrace ? $"[{GetCallerInfo()}] {message}" : message);
     }
 
     private static string GetCallerInfo()
