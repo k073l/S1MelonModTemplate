@@ -28,7 +28,7 @@ namespace MyMod.Helpers;
 
 /// <summary>
 /// Provides extension methods for converting between C# and Il2Cpp lists.
-/// /// </summary>
+/// </summary>
 public static class Il2CppListExtensions
 {
     /// <summary>
@@ -278,7 +278,7 @@ public static class Utils
     /// <param name="timeout">The maximum time to wait in seconds. If NaN, waits indefinitely.</param>
     /// <param name="onTimeout">Action to invoke if the timeout is reached.</param>
     /// <param name="onFinish">Action to invoke when the condition is met.</param>
-    /// <returns></returns>
+    /// <returns>>An enumerator that waits for the condition to be true.</returns>
     public static IEnumerator WaitForCondition(
         System.Func<bool> condition,
         float timeout = Single.NaN,
@@ -334,6 +334,7 @@ public static class Utils
         if (component != null) return component;
         component = gameObject.AddComponent<T>();
         Logger.Debug($"Added component {typeof(T).Name} to GameObject {gameObject.name}");
+        return component;
     }
 
     /// <summary>
