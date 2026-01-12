@@ -73,7 +73,7 @@ def clean_mods_dir(mods_dir_path: Path) -> None:
         info("Mods directory doesn't exist, will be created")
         return
 
-    with console.status("[cyan]Removing old mods...", spinner="line"):
+    with console.status("Removing old mods...", spinner="line"):
         for item in mods_dir_path.iterdir():
             try:
                 if item.is_dir():
@@ -99,7 +99,7 @@ def copy_item(
     """Copy a file or directory to destination directory."""
     target = dst_dir / src.name
     if progress is None:
-        info(f"Copying [cyan]{src.name}[/cyan] to [blue]{dst_dir}[/blue]")
+        info(f"Copying {src.name} to {dst_dir}")
     if src.is_dir():
         if target.exists():
             shutil.rmtree(target)
@@ -131,10 +131,10 @@ def copy_structured_mod(mod_path: Path, dst_mods_dir: Path) -> None:
     """
     mod_path = mod_path.resolve()
     if not mod_path.exists():
-        warn(f"Mod not found: [yellow]{mod_path}[/yellow]")
+        warn(f"Mod not found: {mod_path}")
         return
 
-    info(f"Copying [cyan]{mod_path.name}[/cyan] structure")
+    info(f"Copying {mod_path.name} structure")
 
     mods_subdir = find_subdir_case_insensitive(mod_path, "Mods")
     if mods_subdir:
@@ -195,19 +195,19 @@ def copy_mod_item(
     """
     mod_path = mod_path.resolve()
     if not mod_path.exists():
-        warn(f"Mod not found: [yellow]{mod_path}[/yellow]")
+        warn(f"Mod not found: {mod_path}")
         return False
 
     if show_timestamp and mod_path.is_file():
         mtime = datetime.fromtimestamp(mod_path.stat().st_mtime)
-        info(f"  [dim]Modified: {mtime.strftime('%Y-%m-%d %H:%M:%S')}[/dim]")
+        info(f"  Modified: {mtime.strftime('%Y-%m-%d %H:%M:%S')}")
 
     if mod_path.is_file():
         target = dst_dir / mod_path.name
         if skip_if_exists and target.exists():
-            info(f"[dim]Skipping [cyan]{mod_path.name}[/cyan] (already exists)[/dim]")
+            info(f"Skipping {mod_path.name} (already exists)")
             return False
-        info(f"Copying mod file [cyan]{mod_path.name}[/cyan]")
+        info(f"Copying mod file {mod_path.name}")
         try:
             shutil.copy2(mod_path, target)
             return True
@@ -228,19 +228,17 @@ def copy_mod_item(
                     (dst_dir / item.name).exists() for item in mods_subdir.iterdir()
                 )
                 if has_existing:
-                    info(
-                        f"[dim]Skipping [cyan]{mod_path.name}[/cyan] (already exists)[/dim]"
-                    )
+                    info(f"Skipping {mod_path.name} (already exists)")
                     return False
-        info(f"Copying structured mod [cyan]{mod_path.name}[/cyan]")
+        info(f"Copying structured mod {mod_path.name}")
         copy_structured_mod(mod_path, dst_dir)
         return True
     else:
         target = dst_dir / mod_path.name
         if skip_if_exists and target.exists():
-            info(f"[dim]Skipping [cyan]{mod_path.name}[/cyan] (already exists)[/dim]")
+            info(f"Skipping {mod_path.name} (already exists)")
             return False
-        info(f"Copying mod folder [cyan]{mod_path.name}[/cyan]")
+        info(f"Copying mod folder {mod_path.name}")
         try:
             if target.exists():
                 shutil.rmtree(target)
@@ -282,10 +280,10 @@ def kill_processes(
     wine_prefix: Optional[str] = None,
 ) -> None:
     """Kill game processes. Uses wineserver -k on Unix for graceful Wine shutdown."""
-    step(f"Terminating [yellow]{exe_name}[/yellow]")
+    step(f"Terminating {exe_name}")
 
     if _is_windows():
-        with console.status(f"[cyan]Sending termination signal...", spinner="line"):
+        with console.status(f"Sending termination signal...", spinner="line"):
             subprocess.run(
                 ["taskkill", "/F", "/IM", exe_name],
                 stdout=subprocess.DEVNULL,
@@ -295,7 +293,7 @@ def kill_processes(
     else:
         wineserver = _find_wineserver(wine_prefix)
 
-        with console.status(f"[cyan]Shutting down Wine processes...", spinner="line"):
+        with console.status(f"Shutting down Wine processes...", spinner="line"):
             if wineserver:
                 env = os.environ.copy()
                 if wine_prefix:
@@ -327,13 +325,13 @@ def wait_for_exit(
 ) -> None:
     """Wait for process to exit, with timeout."""
     deadline = time.time() + wait_seconds + 2.0
-    with console.status(f"[cyan]Waiting for process to exit...", spinner="line"):
+    with console.status(f"Waiting for process to exit...", spinner="line"):
         while time.time() < deadline:
             if not is_running(exe_name, use_wine, wine_prefix):
-                ok(f"[yellow]{exe_name}[/yellow] stopped")
+                ok(f"{exe_name} stopped")
                 return
             time.sleep(0.2)
-    warn(f"[yellow]{exe_name}[/yellow] may still be running")
+    warn(f"{exe_name} may still be running")
 
 
 def is_running(
@@ -380,7 +378,7 @@ def launch_game(
     else:
         cmd = [str(exe_path), *args]
 
-    step(f"Launching game: [dim]{' '.join(cmd)}[/dim]")
+    step(f"Launching game: {' '.join(cmd)}")
     subprocess.Popen(
         cmd,
         cwd=working_dir,
@@ -408,7 +406,7 @@ def copy_user_mods(
             else Path(mod_entry)
         )
         if not mod_path.exists():
-            warn(f"Mod not found: [yellow]{mod_path}[/yellow]")
+            warn(f"Mod not found: {mod_path}")
             continue
         valid_mods.append(mod_path)
 
@@ -421,9 +419,9 @@ def copy_user_mods(
             TaskProgressColumn(),
             console=console,
         ) as progress:
-            task = progress.add_task("[cyan]Copying mods...", total=len(valid_mods))
+            task = progress.add_task("Copying mods...", total=len(valid_mods))
             for mod_path in valid_mods:
-                progress.update(task, description=f"[cyan]Copying {mod_path.name}")
+                progress.update(task, description=f"Copying {mod_path.name}")
                 if copy_mod_item(
                     mod_path,
                     mods_dir_path,
@@ -448,9 +446,9 @@ def copy_multiplayer_mods(
 
     mp_mod_path = Path(mp_mod).resolve()
     if not mp_mod_path.exists():
-        warn(f"Multiplayer mod not found: [yellow]{mp_mod}[/yellow]")
+        warn(f"Multiplayer mod not found: {mp_mod}")
     else:
-        with console.status("[cyan]Copying multiplayer mod...", spinner="line"):
+        with console.status("Copying multiplayer mod...", spinner="line"):
             if copy_mod_item(mp_mod_path, mods_dir_path, skip_if_exists=not force_copy):
                 ok("Multiplayer mod copied")
                 count += 1
@@ -459,11 +457,11 @@ def copy_multiplayer_mods(
 
     starter_src = Path(mp_starter).resolve()
     if not starter_src.exists():
-        warn(f"Multiplayer starter not found: [yellow]{mp_starter}[/yellow]")
+        warn(f"Multiplayer starter not found: {mp_starter}")
     else:
         starter_dst = mods_dir_path.parent / starter_src.name
         if not starter_dst.exists() or force_copy:
-            with console.status("[cyan]Copying multiplayer starter...", spinner="line"):
+            with console.status("Copying multiplayer starter...", spinner="line"):
                 try:
                     shutil.copy2(starter_src, starter_dst)
                     ok("Multiplayer starter copied")
@@ -487,7 +485,7 @@ def copy_library_mods(
 
     if s1api_path:
         step("Copying S1API")
-        with console.status("[cyan]Copying S1API...", spinner="line"):
+        with console.status("Copying S1API...", spinner="line"):
             if copy_mod_item(
                 Path(s1api_path).resolve(),
                 mods_dir_path,
@@ -497,7 +495,7 @@ def copy_library_mods(
 
     if unity_explorer_path:
         step("Copying UnityExplorer")
-        with console.status("[cyan]Copying UnityExplorer...", spinner="line"):
+        with console.status("Copying UnityExplorer...", spinner="line"):
             if copy_mod_item(
                 Path(unity_explorer_path).resolve(),
                 mods_dir_path,
@@ -553,7 +551,7 @@ def main(
     use_wine = not _is_windows()
 
     if not target_path.exists():
-        error(f"Target not found: [yellow]{target_path}[/yellow]")
+        error(f"Target not found: {target_path}")
         raise typer.Exit(code=1)
 
     multiplayer = bool(mp_mod and mp_starter)
@@ -602,9 +600,7 @@ def main(
     )
 
     step("Copying built mod")
-    with console.status(
-        f"[cyan]Copying [yellow]{target_path.name}[/yellow]...", spinner="line"
-    ):
+    with console.status(f"Copying {target_path.name}...", spinner="line"):
         copy_item(target_path, mods_dir_path)
     total_copied += 1
 
