@@ -71,9 +71,11 @@ start "" "Schedule I.exe" --join --adjust-window --left-offset 20 %*
 ```
 The starter may be `.sh` on Linux, adapted accordingly (with wine prefixes etc).
 
-`UnityExplorer` directory should contain `.dll` files for IL2CPP and Mono versions of the mod. The template expects them to be named as shown above - the default names of the files, straight from the [source](https://github.com/yukieiji/UnityExplorer/releases). **You will also need to manually copy the `UniverseLib`** versions to respective `UserLibs` in your game files directory, as the template does not handle that.
+`UnityExplorer` directory should contain `.dll` files for IL2CPP and Mono versions of the mod. The template expects them to be named as shown above - the default names of the files, straight from the [source](https://github.com/yukieiji/UnityExplorer/releases). This means that in `UnityExplorer` directory you should have 2 DLL files - `UnityExplorer.ML.Mono.dll` and `UnityExplorer.ML.IL2CPP.CoreCLR.dll`. **You will also need to manually copy the `UniverseLib`** versions to respective `UserLibs` in your game files directory, as the template does not handle that.
 
-`gamefiles` directory should contain the game files for IL2CPP and Mono versions of the game. You can use the `Schedule I IL2CPP` and `Schedule I Mono` directories to store the game files for each version.
+`S1API` directory should contain the structure of the S1API release package, i.e. it should have `mods` and `plugins` subdirectories with respective files inside.
+
+`gamefiles` directory should contain the game files for IL2CPP and Mono versions of the game. You can use the `Schedule I IL2CPP` and `Schedule I Mono` directories to store the game files for each version. They should be the full game directories, with MelonLoader installed. Copy them from your Steam installation after installing MelonLoader. For example, if your branch is set to `none` or `beta`, copy the full Steam Schedule I installation directory to `Schedule I IL2CPP`. Change the branch to `alternate` or `alternate-beta` and copy the full installation directory to `Schedule I Mono`. Run them once after copying to verify the game and MelonLoader work correctly.
 
 ### Usage
 #### Installation
@@ -97,7 +99,6 @@ After creating your project, pick a license for your mod (see https://choosealic
 | --------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | S1MonoDir             | Yes      | Path to the Mono version of the game.                                                                                                                                        |
 | S1IL2CPPDir           | Yes      | Path to the IL2CPP version of the game.                                                                                                                                      |
-| CommonDir             | No       | Path to the common directory. (helper path, mostly useful as a variable - you can use it for relative paths for other parameters)                                            |
 | UnityExplorerRoot     | No       | Path to the [UnityExplorer](https://github.com/yukieiji/UnityExplorer) mod directory, as described above.                                                                    |
 | S1APIRoot             | No       | Path to the [S1API](https://github.com/ifBars/S1API) directory. Structure of this directory is the same as S1API release package (contains `mods` and `plugins` directories) |
 | MultiplayerModMono    | No       | Path to the Mono version of the [LocalMultiplayer](https://github.com/k073l/LocalMultiplayer) mod.                                                                           |
@@ -105,15 +106,13 @@ After creating your project, pick a license for your mod (see https://choosealic
 | MultiplayerModStarter | No       | Path to the [LocalMultiplayer](https://github.com/k073l/LocalMultiplayer) mod starter bat file.                                                                              |
 
 
-You can use parameters to set the paths of other params. For example, you can set the `CommonDir` parameter to the path of the common directory, and then use it to set the paths of the `UnityExplorerRoot`, `S1APIRoot`, `MultiplayerModMono`, and `MultiplayerModIL2CPP` parameters. This way, you can keep your configurations readable.
-Example:
+Commandline example with some optional parameters:
 ```bash
 dotnet new S1MelonMod -n MyNewMod \
-  --CommonDir "C:\S1\common" \
   --S1MonoDir "C:\S1\gamefiles\Schedule I Mono" \
   --S1IL2CPPDir "C:\S1\gamefiles\Schedule I IL2CPP" \
-  --UnityExplorerRoot "$(CommonDir)\UnityExplorer" \
-  --S1APIRoot "$(CommonDir)\S1API"
+  --UnityExplorerRoot "C:\S1\common\UnityExplorer" \
+  --S1APIRoot "C:\S1\common\S1API"
 ```
 
 LocalMultiplayer mod can be substituted with [LocalLobby](https://github.com/k073l/LocalLobby) as they share the same interface.

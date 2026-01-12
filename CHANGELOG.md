@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.1
+- Fix post-build script print statements
+- Remove CommonDir from template parameters, as it was causing confusion
 ## 2.0.0
 - Restructure the template
 - Migrate helper scripts and post-build logic to Python with uv package manager

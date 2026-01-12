@@ -67,21 +67,13 @@
       "description": "The path to the Schedule I IL2CPP location. This is used to set up the project references.",
       "replaces": "S1IL2CPPDIR"
     },
-    "CommonDir": {
-      "displayName": "Common Location",
-      "type": "parameter",
-      "dataType": "string",
-      "isRequired": false,
-      "description": "Path to Common location. This could be used to store commonly used mods in one place.",
-      "replaces": "COMMONDIR"
-    },
     "UnityExplorerRoot": {
       "displayName": "UnityExplorer Mod Location",
       "type": "parameter",
       "dataType": "string",
       "isRequired": false,
-      "defaultValue": "$(CommonDir)\\UnityExplorer",
-      "description": "Path to UnityExplorer Mod Location. UnityExplorer is a mod that helps you debug GameObjects and their components.",
+      "defaultValue": "path-to\\UnityExplorer",
+      "description": "Path to UnityExplorer directory Location. Should contain 2 DLLs - IL2CPP and Mono. UnityExplorer is a mod that helps you debug GameObjects and their components.",
       "replaces": "UEROOT"
     },
     "S1APIRoot": {
@@ -89,8 +81,8 @@
       "type": "parameter",
       "dataType": "string",
       "isRequired": false,
-      "defaultValue": "$(CommonDir)\\S1API",
-      "description": "Path to S1API Mod Location. S1API is a mod that provides an API for Schedule I mods.",
+      "defaultValue": "path-to\\S1API",
+      "description": "Path to S1API Directory Location. Should be structured like their package. S1API is a mod that provides an API for Schedule I mods.",
       "replaces": "S1APIROOT"
     },
     "MultiplayerModMono": {
@@ -98,7 +90,7 @@
       "type": "parameter",
       "dataType": "string",
       "isRequired": false,
-      "defaultValue": "$(CommonDir)\\LocalMultiplayer\\LocalMultiplayer-Mono.dll",
+      "defaultValue": "path-to\\LocalMultiplayer\\LocalMultiplayer-Mono.dll",
       "description": "Path to Multiplayer Mod Location. This mod allows you to test your mods in local multiplayer.",
       "replaces": "MULTIPLAYERMOD"
     },
@@ -107,7 +99,7 @@
       "type": "parameter",
       "dataType": "string",
       "isRequired": false,
-      "defaultValue": "$(CommonDir)\\LocalMultiplayer\\LocalMultiplayer-IL2CPP.dll",
+      "defaultValue": "path-to\\LocalMultiplayer\\LocalMultiplayer-IL2CPP.dll",
       "description": "Path to Multiplayer Mod Location. This mod allows you to test your mods in local multiplayer.",
       "replaces": "MULTIPLAYERMODIL2CPP"
     },
@@ -116,7 +108,7 @@
       "type": "parameter",
       "dataType": "string",
       "isRequired": false,
-      "defaultValue": "$(CommonDir)\\LocalMultiplayer\\LocalMultiplayer.bat",
+      "defaultValue": "path-to\\LocalMultiplayer\\LocalMultiplayer.bat",
       "description": "Path to Multiplayer Mod Starter Location. This is a batch file that starts the game in two windows - server and client.",
       "replaces": "MULTIPLAYERMODSTARTER"
     }
