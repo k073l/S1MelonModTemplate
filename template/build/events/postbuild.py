@@ -41,77 +41,29 @@ from rich.progress import (
     BarColumn,
     TaskProgressColumn,
 )
-from rich.traceback import install as rich_traceback_install
 
 
-def _supports_unicode() -> bool:
-    """Check if the console supports Unicode output."""
-    try:
-        encoding = getattr(sys.stdout, "encoding", "utf-8") or "utf-8"
-        return encoding.lower() not in ["cp1250", "cp437", "ascii"]
-    except Exception:
-        return True
-
-
-# Create console with appropriate settings based on Unicode support
-if _supports_unicode():
-    console = Console()
-else:
-    # For limited encodings, disable all markup and colors
-    console = Console(markup=False, highlight=False, force_terminal=False)
-
-rich_traceback_install(show_locals=False)
+console = Console(markup=False, highlight=False, force_terminal=False)
 
 
 def info(msg: str) -> None:
-    if _supports_unicode():
-        try:
-            console.print(f"[dim cyan]→[/dim cyan] {msg}", style="cyan")
-        except Exception:
-            console.print(f"[dim cyan]>[/dim cyan] {msg}", style="cyan")
-    else:
-        print(f"> {msg}")
+    print(f"> {msg}")
 
 
 def warn(msg: str) -> None:
-    if _supports_unicode():
-        try:
-            console.print(f"[yellow]⚠[/yellow] {msg}", style="yellow")
-        except Exception:
-            console.print(f"[yellow]![/yellow] {msg}", style="yellow")
-    else:
-        print(f"! {msg}")
+    print(f"! {msg}")
 
 
 def error(msg: str) -> None:
-    if _supports_unicode():
-        try:
-            console.print(f"[bold red]✗[/bold red] {msg}", style="red")
-        except Exception:
-            console.print(f"[bold red]x[/bold red] {msg}", style="red")
-    else:
-        print(f"x {msg}")
+    print(f"x {msg}")
 
 
 def ok(msg: str) -> None:
-    if _supports_unicode():
-        try:
-            console.print(f"[green]✓[/green] {msg}", style="green")
-        except Exception:
-            console.print(f"[green]+[/green] {msg}", style="green")
-    else:
-        print(f"+ {msg}")
+    print(f"+ {msg}")
 
 
 def step(msg: str) -> None:
-    if _supports_unicode():
-        try:
-            console.print(f"\n[bold blue]▸[/bold blue] [bold]{msg}[/bold]")
-        except Exception:
-            console.print(f"\n[bold blue]o[/bold blue] [bold]{msg}[/bold]")
-    else:
-        # Plain ASCII output for limited encodings
-        print(f"\no {msg}")
+    print(f"\no {msg}")
 
 
 def clean_mods_dir(mods_dir_path: Path) -> None:
@@ -658,15 +610,8 @@ def main(
 
     if no_launch:
         info("Skipping game launch (--no-launch)")
-        if _supports_unicode():
-            console.print(f"\n[dim]Copied {total_copied} items total[/dim]")
-            try:
-                console.rule("[bold green]✓ Post-build completed successfully")
-            except Exception:
-                console.rule("[bold green]+ Post-build completed successfully")
-        else:
-            print(f"\nCopied {total_copied} items total")
-            print("+ Post-build completed successfully")
+        print(f"\nCopied {total_copied} items total")
+        print("+ Post-build completed successfully")
         return
 
     if launch_delay > 0:
@@ -705,15 +650,8 @@ def main(
                 start_new_session=True,
             )
 
-    if _supports_unicode():
-        console.print(f"\n[dim]Copied {total_copied} items total[/dim]")
-        try:
-            console.rule("[bold green]✓ Post-build completed successfully")
-        except Exception:
-            console.rule("[bold green]+ Post-build completed successfully")
-    else:
-        print(f"\nCopied {total_copied} items total")
-        print("+ Post-build completed successfully")
+    print(f"\nCopied {total_copied} items total")
+    print("+ Post-build completed successfully")
 
 
 if __name__ == "__main__":
