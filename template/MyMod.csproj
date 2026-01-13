@@ -17,7 +17,7 @@
 
         <Version>1.0.0</Version>
         <Author>me</Author>
-        <Description></Description>
+        <Description>does stuff i guess</Description>
 
         <Configurations>Mono;IL2CPP</Configurations>
     </PropertyGroup>

@@ -13,7 +13,7 @@ from rich.traceback import install
 import typer
 import json
 import re
-import xml.etree.ElementTree as ET
+from lxml import etree as ET
 
 app = typer.Typer()
 console = Console()
@@ -50,7 +50,6 @@ FILES = {
         "author": "Author",
     },
 }
-
 # If a project (.csproj) file is found, add it to the FILES dictionary
 DOTNET_PROJECT_FILE = next((file for file in Path.cwd().rglob("*.csproj")), None)
 if DOTNET_PROJECT_FILE:
@@ -82,7 +81,7 @@ def update_xml(filepath: str, tag: str, val: str, ext: str) -> bool:
     try:
         if not Path(filepath).exists():
             return False
-        with open(filepath, "r", encoding="utf-8") as f:
+        with open(filepath, "rb") as f:
             content = f.read()
         root = ET.fromstring(content)
         element = root.find(tag)
@@ -93,7 +92,7 @@ def update_xml(filepath: str, tag: str, val: str, ext: str) -> bool:
             return True
         else:
             return False
-    except ET.ParseError as e:
+    except ET.LxmlError as e:
         console.log(f"[red]Error: {e}[/red]")
         return False
 
