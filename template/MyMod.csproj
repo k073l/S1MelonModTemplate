@@ -15,6 +15,10 @@
 
         <RootNamespace>MyMod</RootNamespace>
 
+        <Version>1.0.0</Version>
+        <Author>me</Author>
+        <Description></Description>
+
         <Configurations>Mono;IL2CPP</Configurations>
     </PropertyGroup>
 
