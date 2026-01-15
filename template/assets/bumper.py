@@ -1,7 +1,7 @@
 #!/usr/bin/env -S uv run --script
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["rich", "typer"]
+# dependencies = ["rich", "typer", "lxml"]
 # ///
 """
 This tool can be used to bump version numbers and update descriptions
@@ -13,7 +13,7 @@ from rich.traceback import install
 import typer
 import json
 import re
-import xml.etree.ElementTree as ET
+from lxml import etree as ET
 
 app = typer.Typer()
 console = Console()
@@ -50,6 +50,14 @@ FILES = {
         "author": "Author",
     },
 }
+# If a project (.csproj) file is found, add it to the FILES dictionary
+DOTNET_PROJECT_FILE = next((file for file in Path.cwd().rglob("*.csproj")), None)
+if DOTNET_PROJECT_FILE:
+    FILES[DOTNET_PROJECT_FILE.relative_to(Path.cwd()).as_posix()] = {
+        "version": "PropertyGroup/Version",
+        "description": "PropertyGroup/Description",
+        "author": "PropertyGroup/Author",
+    }
 
 
 def update_json(filepath: str, key: str, val: str) -> bool:
@@ -68,23 +76,23 @@ def update_json(filepath: str, key: str, val: str) -> bool:
         return False
 
 
-def update_xml(filepath: str, tag: str, val: str) -> bool:
-    """Update an XML file at the given tag with the given value. Returns True if successful."""
+def update_xml(filepath: str, tag: str, val: str, ext: str) -> bool:
+    """Update an XML or csproj file at the given tag with the given value. Returns True if successful."""
     try:
         if not Path(filepath).exists():
             return False
-        with open(filepath, "r", encoding="utf-8") as f:
+        with open(filepath, "rb") as f:
             content = f.read()
         root = ET.fromstring(content)
         element = root.find(tag)
         if element is not None:
             element.text = val
             tree = ET.ElementTree(root)
-            tree.write(filepath, encoding="utf-8", xml_declaration=True)
+            tree.write(filepath, encoding="utf-8", xml_declaration=(ext != "csproj"))
             return True
         else:
             return False
-    except ET.ParseError as e:
+    except ET.LxmlError as e:
         console.log(f"[red]Error: {e}[/red]")
         return False
 
@@ -130,8 +138,8 @@ def version(version: str = typer.Argument(..., help="The new version number to s
             match ext:
                 case "json":
                     success = update_json(filepath, keys["version"], version)
-                case "xml":
-                    success = update_xml(filepath, keys["version"], version)
+                case "xml" | "csproj":
+                    success = update_xml(filepath, keys["version"], version, ext)
                 case "cs":
                     success = update_cs(filepath, keys["version"], version)
         if success:
@@ -156,8 +164,8 @@ def description(
                     success = update_cs(filepath, keys["description"], description)
                 case "json":
                     success = update_json(filepath, keys["description"], description)
-                case "xml":
-                    success = update_xml(filepath, keys["description"], description)
+                case "xml" | "csproj":
+                    success = update_xml(filepath, keys["description"], description, ext)
         if success:
             ok(f"[cyan]{filepath}[/cyan]")
             updated_count += 1
@@ -178,8 +186,8 @@ def author(author: str = typer.Argument(..., help="The new author name to set"))
             match ext:
                 case "cs":
                     success = update_cs(filepath, keys["author"], author)
-                case "xml":
-                    success = update_xml(filepath, keys["author"], author)
+                case "xml" | "csproj":
+                    success = update_xml(filepath, keys["author"], author, ext)
         if success:
             ok(f"[cyan]{filepath}[/cyan]")
             updated_count += 1
