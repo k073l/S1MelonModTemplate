@@ -1,5 +1,7 @@
 # Changelog
 
+## 2.0.2
+- Support .csproj file + use lxml library to keep comments in XML files in bumper script by SkyFoxCoder in #1. Thanks!
 ## 2.0.1
 - Fix post-build script print statements
 - Remove CommonDir from template parameters, as it was causing confusion

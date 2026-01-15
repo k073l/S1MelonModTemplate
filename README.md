@@ -142,7 +142,7 @@ For standard Wine instead of Proton:
 The post-build script will automatically use these settings to launch the game through Wine/Proton.
 
 #### Version Management
-The template includes a bumper script for updating version numbers, descriptions, and author information across multiple files at once. This updates `MainMod.cs`, `assets/manifest.json`, and `assets/fomod/info.xml`.
+The template includes a bumper script for updating version numbers, descriptions, and author information across multiple files at once. This updates `MainMod.cs`, `assets/manifest.json`, `ModName.csproj` and `assets/fomod/info.xml`.
 
 On Unix-like systems (Linux/macOS), you can run it directly:
 ```bash
