@@ -4,7 +4,7 @@
         <id>k073l.S1MelonMod</id>
         <version>2.0.2</version>
         <description>Schedule I MelonLoader Mod Template</description>
-        <authors>k073l</authors>
+        <authors>k073l, SkyFoxCoder</authors>
         <tags>melonloader template mod modding schedule-one schedule-1 schedule il2cpp mono</tags>
         <readme>README.md</readme>
         <projectUrl>https://github.com/k073l/S1MelonModTemplate</projectUrl>
